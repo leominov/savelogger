@@ -3,7 +3,7 @@ import urllib2
 import getpass
 import sublime_plugin
 
-API_URL = "http://api.hakama.keikogi.ru/post.php"
+API_URL = "http://logger.hakama.keikogi.ru/api/post"
 
 class SaveLogger(sublime_plugin.EventListener):
     def on_post_save(self, view):
