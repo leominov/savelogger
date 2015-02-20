@@ -6,7 +6,10 @@ import sublime_plugin
 API_URL = "http://logger.hakama.keikogi.ru/api/post"
 
 class SaveLogger(sublime_plugin.EventListener):
-    def on_post_save(self, view):
+    def on_pre_save(self, view):
+        if not view.is_dirty():
+            return
+
         currently_view = []
         for item in view.window().views():
             currently_view.append({
