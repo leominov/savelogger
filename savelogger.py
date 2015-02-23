@@ -3,6 +3,7 @@ import urllib2
 import getpass
 import sublime_plugin
 
+API_KEY = "NONE"
 API_URL = "http://logger.hakama.keikogi.ru/api/post"
 
 class SaveLogger(sublime_plugin.EventListener):
@@ -33,9 +34,11 @@ class SaveLogger(sublime_plugin.EventListener):
             'history': view.command_history(-1),
         }
 
-        req = urllib2.Request(API_URL + '?data=' + json.dumps(result))
+        req = urllib2.Request(
+            API_URL + '?data=' + json.dumps(result) + '&api_key=' + API_KEY
+        )
 
         try:
-            urllib2.urlopen(req)
+           urllib2.urlopen(req)
         except urllib2.HTTPError:
-            print 'Sending error.'
+           print 'Sending error.'
