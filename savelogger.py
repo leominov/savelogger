@@ -1,7 +1,10 @@
 import json
+import urllib
 import urllib2
 import getpass
 import sublime_plugin
+
+DEBUG_LEVEL = 0
 
 API_KEY = "NONE"
 API_URL = "http://logger.hakama.keikogi.ru/api/post"
@@ -20,7 +23,7 @@ class SaveLogger(sublime_plugin.EventListener):
                 'syntax': item.settings().get('syntax'),
             })
 
-        result = {
+        data_container = {
             'username': getpass.getuser(),
             'files': currently_view,
             'current_file': {
@@ -34,11 +37,15 @@ class SaveLogger(sublime_plugin.EventListener):
             'history': view.command_history(-1),
         }
 
-        req = urllib2.Request(
-            API_URL + '?data=' + json.dumps(result) + '&api_key=' + API_KEY
-        )
+        result_container = {
+            'data': json.dumps(data_container),
+            'api_key': API_KEY
+        }
+
+        opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=DEBUG_LEVEL))
+        data = urllib.urlencode(result_container)
 
         try:
-           urllib2.urlopen(req)
+            opener.open(API_URL, data=data)
         except urllib2.HTTPError:
-           print 'Sending error.'
+            print 'Sending error'
