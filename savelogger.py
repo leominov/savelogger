@@ -37,13 +37,11 @@ class SaveLogger(sublime_plugin.EventListener):
             'history': view.command_history(-1),
         }
 
-        result_container = {
+        opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=DEBUG_LEVEL))
+        data = urllib.urlencode({
             'data': json.dumps(data_container),
             'api_key': API_KEY
-        }
-
-        opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=DEBUG_LEVEL))
-        data = urllib.urlencode(result_container)
+        })
 
         try:
             opener.open(API_URL, data=data)
